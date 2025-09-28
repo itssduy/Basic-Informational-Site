@@ -4,12 +4,13 @@ const express = require('express');
 const userRouter = express.Router();
 
 
-const userJson = require('../users.json');
+const {getUsers, getUserById} = require('../db');
 
 // BASIC CRUD ENDPOINTS FOR USERS
 
-userRouter.get(('/'), (req,res, next)=>{
-    res.json(userJson);
+userRouter.get(('/'), async (req,res, next)=>{
+    const users = await(getUsers())
+    res.send(users);
 })
 
 userRouter.post(('/'), (req,res, next)=>{
@@ -24,10 +25,12 @@ userRouter.post(('/'), (req,res, next)=>{
 userRouter.get(('/:id'), (req,res, next)=>{
     const id = req.params.id
 
-    if(id){
-        return res.next(new Error("Id not found"))
+    if(!id){
+        return next(new Error("Id not found"));
     }
-    res.send("works!")
+
+    const user = getUserById(id)
+    res.send(user)
 })
 
 

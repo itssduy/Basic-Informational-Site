@@ -1,0 +1,20 @@
+<% const animals = ['dog', 'cat','pig','cow','sheep']%>
+
+
+<html>
+
+    <body>
+        <ul>
+            <% animals.map((x)=>{ %>
+                <li><%= x %> is the animal</li>
+            <%}) %>
+            <%- include('footer') %>
+
+        </ul>
+        
+
+
+        <%= message %>
+    </body>
+</html>
+

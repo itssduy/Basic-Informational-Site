@@ -2,28 +2,33 @@ const express = require('express');
 
 const app = express();
 const PORT = process.env.PORT || 8000
-//const path = require('path');
+const path = require('path');
+
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
 //Routes
-const userRouter = require('./routes/user.js')
-
-
+const userRouter = require('./routes/user.js');
 
 //Middleware
-const loggerMiddleware = require('./middleware/logger.js')
+const loggerMiddleware = require('./middleware/logger.js');
 
-require('dotenv').config()
+require('dotenv').config();
+
 app.use('/', loggerMiddleware);
-
 
 app.use('/users', userRouter);
 
 
-app.use((err, req, res, next)=>{
-    console.log("unexpected server error")
-    res.status(500).send(err.message || "UNEXPECTED SERVER ERROR!")
-    next();
+app.get('/animals', (req, res)=>{
+    res.render("index", {message: "EJS Rocks!"});
 })
+app.get('/about', (req, res)=>{
+    res.render('about', {message: 'welcome to the about page'})
+})
+
+
+
 
 
 // const options = {root: path.join(__dirname)}
@@ -37,6 +42,13 @@ app.use((err, req, res, next)=>{
 // app.get('/contact-me', (req, res)=>{
 //     res.sendFile('contact-me.html', options);
 // })
+
+
+app.use((err, req, res, next)=>{
+    console.log("unexpected server error");
+    res.status(500).send(err.message || "UNEXPECTED SERVER ERROR!");
+    next();
+})
 
 
 
